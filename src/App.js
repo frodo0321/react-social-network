@@ -2,39 +2,46 @@ import React, { Component } from 'react';
 //import axios from 'axios'
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
+
+import { UIRouter, UIRouterReact, servicesPlugin, hashLocationPlugin, UISref, UIView } from '@uirouter/react';
+
+import Auth from "./components/auth/Auth";
+import NewsFeed from "./components/news-feed/NewsFeed";
+
+
+var states = [{
+        name: "auth",
+        url: "/auth",
+        component: Auth
+    }, {
+        name: "news-feed",
+        url: "/news-feed",
+        component: NewsFeed
+    }
+];
+
+
+const router = new UIRouterReact();
+router.plugin(servicesPlugin);
+router.plugin(hashLocationPlugin);
+states.forEach(state => router.stateRegistry.register(state));
+// Start the router
+//router.start();
+
 
 class App extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {showRegister: false};
-
-        this.toggleRegister = this.toggleRegister.bind(this);
-    }
-
-    toggleRegister(event) {
-        console.log("TOGGLE REGISTER");
-        this.setState({showRegister: !this.state.showRegister});
     }
 
     render() {
 
-        var formContainerStyle = {
-            padding: "10px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            marginTop: "10%"
-        };
         return (
             <div className="App">
                 <MuiThemeProvider>
-                    <div className="form-container" style={formContainerStyle}>
-                        {this.state.showRegister ? <Register showLogin={this.toggleRegister}/> : <Login showRegister={this.toggleRegister}/>}
-                    </div>
+                    <Auth />
                 </MuiThemeProvider>
             </div>
        );
@@ -42,3 +49,17 @@ class App extends Component {
 }
 
 export default App;
+
+                    /*<UIRouter router={router}>
+
+                    //    //<UISref to={"auth"}> 
+                    //    //    <a>Joe Bloggs</a>
+                    //    //</UISref>
+                    //    //<UISref to={"news-feed"}> 
+                    //    //    <a>Joe Bloggs</a>
+                    //    //</UISref>
+
+                    //    <div>
+                    //        <UIView/>
+                    //    </div>
+                    //</UIRouter>*/

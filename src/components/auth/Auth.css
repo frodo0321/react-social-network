@@ -1,3 +1,11 @@
+.Auth .form-container {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10%;
+}
+
 .Login, .Register {
     width: 400px;
     height: 300px;

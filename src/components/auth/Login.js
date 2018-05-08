@@ -2,32 +2,38 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import RaisedButton from 'material-ui/RaisedButton';
 import "./Auth.css";
+const config = require("../../config");
 
 class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {form: {}};
 
         this.showRegister = this.showRegister.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        var target = event.target;
-        this.setState({[target.name]: target.value});
+        this.onChange = this.onChange.bind(this);
     }
 
     onSubmit(event) {
         event.preventDefault();
-        axios.get("http://ipinfo.io")
+        axios.post(config.apiUrl + "/login", this.state.form)
             .then((response) => {
                 console.log("RESPONSE", response);
             })
+
+    }
+
+    onChange(event) {
+        var newFormValue = Object.assign({}, this.state.form, {
+                [event.target.name]: event.target.value
+            }
+        );
+        var newState = Object.assign({}, this.state, {form: newFormValue});
+        this.setState(newState);
     }
 
     showRegister(event) {
-        console.log("SHOW REGISTER");
         return this.props.showRegister(event);
     }
 
@@ -37,10 +43,10 @@ class Login extends Component {
                 <h2>Login</h2>
                 <form onSubmit={this.onSubmit}>
                     <div>
-                        <input placeholder="Username" name="username" type="text" />
+                        <input placeholder="Email" onChange={this.onChange} name="email" type="text" />
                     </div>
                     <div>
-                        <input placeholder="Password" name="password" type="password" />
+                        <input placeholder="Password" onChange={this.onChange} name="password" type="password" />
                     </div>
                     <div>
                         <RaisedButton type="submit" label="Login" primary={true} />
